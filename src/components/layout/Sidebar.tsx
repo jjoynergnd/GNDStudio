@@ -25,22 +25,6 @@ export default function Sidebar() {
 
       {/* Main sidebar content */}
       <div className="flex-1 overflow-hidden">
-        {/* Logo */}
-        <div className="flex items-center gap-3 p-4 border-b border-slate-700">
-          <Link href="/" className="flex items-center gap-2">
-            {/* GND block */}
-            <div className="px-3 py-1 bg-emerald-500 text-slate-900 font-extrabold rounded shadow-md">
-              GND
-            </div>
-
-            {/* Studio text only when expanded */}
-            {!collapsed && (
-              <span className="font-bold text-lg tracking-wide text-white">
-                Studio
-              </span>
-            )}
-          </Link>
-        </div>
 
         {/* Navigation */}
         <nav className="p-3">
@@ -48,10 +32,13 @@ export default function Sidebar() {
 
             {/* Dashboard */}
             <li className="group relative">
-              <button className="flex items-center w-full gap-3 py-2 px-2 rounded-md hover:bg-slate-800 transition-colors">
+              <Link
+                href="/"
+                className="flex items-center w-full gap-3 py-2 px-2 rounded-md hover:bg-slate-800 transition-colors"
+              >
                 <LayoutDashboard className="w-5 h-5 text-slate-100" />
                 {!collapsed && <span className="text-sm">Dashboard</span>}
-              </button>
+              </Link>
 
               {collapsed && (
                 <span className="absolute left-14 top-1/2 -translate-y-1/2 whitespace-nowrap bg-slate-800 text-xs px-2 py-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
@@ -62,10 +49,13 @@ export default function Sidebar() {
 
             {/* Projects */}
             <li className="group relative">
-              <button className="flex items-center w-full gap-3 py-2 px-2 rounded-md hover:bg-slate-800 transition-colors">
+              <Link
+                href="/projects"
+                className="flex items-center w-full gap-3 py-2 px-2 rounded-md hover:bg-slate-800 transition-colors"
+              >
                 <FolderKanban className="w-5 h-5 text-slate-100" />
                 {!collapsed && <span className="text-sm">Projects</span>}
-              </button>
+              </Link>
 
               {collapsed && (
                 <span className="absolute left-14 top-1/2 -translate-y-1/2 whitespace-nowrap bg-slate-800 text-xs px-2 py-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
@@ -76,10 +66,13 @@ export default function Sidebar() {
 
             {/* Settings */}
             <li className="group relative">
-              <button className="flex items-center w-full gap-3 py-2 px-2 rounded-md hover:bg-slate-800 transition-colors">
+              <Link
+                href="/settings"
+                className="flex items-center w-full gap-3 py-2 px-2 rounded-md hover:bg-slate-800 transition-colors"
+              >
                 <Settings className="w-5 h-5 text-slate-100" />
                 {!collapsed && <span className="text-sm">Settings</span>}
-              </button>
+              </Link>
 
               {collapsed && (
                 <span className="absolute left-14 top-1/2 -translate-y-1/2 whitespace-nowrap bg-slate-800 text-xs px-2 py-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">

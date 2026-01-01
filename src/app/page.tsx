@@ -1,15 +1,17 @@
+"use client";
+
 import ProjectTile from "../components/home/ProjectTile";
 import MyPortfolioTile from "../components/home/tiles/MyPortfolioTile";
-import { projects } from "../features/projects/mockData";
+import NewProjectTile from "../components/home/tiles/NewProjectTile";
 
-// Type for portfolio items
+import { projects as baseProjects } from "../features/projects/mockData";
+
 type Portfolio = {
   id: number;
   name: string;
 };
 
 export default function Home() {
-  // Example portfolio data (empty for now)
   const portfolios: Portfolio[] = [];
 
   return (
@@ -17,22 +19,40 @@ export default function Home() {
       <h1 className="text-2xl font-semibold mb-6">Your Workspace</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {projects.map((project) => {
-          // Inject flipContent ONLY for the "My Portfolio" tile
+        {baseProjects.map((project) => {
           if (project.name === "My Portfolio") {
             return (
               <ProjectTile
                 key={project.id}
-                project={{
-                  ...project,
-                  flipContent: <MyPortfolioTile portfolios={portfolios} />,
-                }}
-              />
+                title={project.name}
+                headerColor={project.headerColor}
+              >
+                <MyPortfolioTile portfolios={portfolios} />
+              </ProjectTile>
             );
           }
 
-          // All other tiles unchanged
-          return <ProjectTile key={project.id} project={project} />;
+          if (project.name === "New Project") {
+            return (
+              <ProjectTile
+                key={project.id}
+                title={project.name}
+                headerColor={project.headerColor}
+              >
+                <NewProjectTile />
+              </ProjectTile>
+            );
+          }
+
+          return (
+            <ProjectTile
+              key={project.id}
+              title={project.name}
+              headerColor={project.headerColor}
+            >
+              <p className="text-slate-600">Coming soon…</p>
+            </ProjectTile>
+          );
         })}
       </div>
     </div>

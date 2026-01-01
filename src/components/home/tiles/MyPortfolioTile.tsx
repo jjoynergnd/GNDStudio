@@ -5,31 +5,27 @@ type Portfolio = {
   name: string;
 };
 
-export default function MyPortfolioTile({
-  portfolios = [],
-}: {
-  portfolios: Portfolio[];
-}) {
+export default function MyPortfolioTile({ portfolios = [] }: { portfolios: Portfolio[] }) {
   const hasPortfolios = portfolios.length > 0;
 
   return (
-    <div className="w-full text-center">
-      <h3 className="font-semibold text-slate-800 mb-3">Your Portfolios</h3>
+    <div className="flex flex-col h-full justify-between">
+      <div>
+        {hasPortfolios ? (
+          <ul className="space-y-1 mb-4">
+            {portfolios.slice(0, 3).map((p) => (
+              <li key={p.id} className="text-slate-700">
+                • {p.name}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-slate-600 mb-4">No portfolios yet</p>
+        )}
+      </div>
 
-      {hasPortfolios ? (
-        <ul className="space-y-1 mb-4">
-          {portfolios.map((p) => (
-            <li key={p.id} className="text-slate-700">
-              • {p.name}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="text-slate-600 mb-4">No portfolios yet</p>
-      )}
-
-      <button className="px-3 py-1 bg-emerald-500 text-white rounded shadow hover:bg-emerald-600 transition">
-        + {hasPortfolios ? "Add Portfolio" : "Create Your First Portfolio"}
+      <button className="w-full py-2 bg-emerald-500 text-white rounded shadow hover:bg-emerald-600 transition">
+        {hasPortfolios ? "View All Portfolios" : "Create Your First Portfolio"}
       </button>
     </div>
   );
