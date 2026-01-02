@@ -16,7 +16,7 @@ export default function NewProjectTile() {
   };
 
   return (
-    <div className="flex flex-col h-full justify-center space-y-4">
+    <div className="flex flex-col h-full justify-start pt-6 space-y-4">
       <input
         type="text"
         placeholder="Project Name"

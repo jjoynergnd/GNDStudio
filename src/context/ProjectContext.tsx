@@ -165,17 +165,21 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
     if (!task) return;
 
     const parentId = task.parentId;
+
+    const project = projects.find((p) =>
+      p.rootTaskIds.includes(taskId) ||
+      (parentId && p.rootTaskIds.includes(parentId))
+    );
+    if (!project) return;
+
     const siblings = parentId
       ? tasks[parentId].childIds
-      : projects.find((p) => p.rootTaskIds.includes(taskId))?.rootTaskIds;
-
-    if (!siblings) return;
+      : project.rootTaskIds;
 
     const index = siblings.indexOf(taskId);
     if (index <= 0) return; // cannot indent first item
 
     const newParentId = siblings[index - 1];
-    const newParent = tasks[newParentId];
 
     // Remove from old parent/root
     if (parentId) {
@@ -189,7 +193,7 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
     } else {
       setProjects((prev) =>
         prev.map((p) =>
-          p.rootTaskIds.includes(taskId)
+          p.id === project.id
             ? {
                 ...p,
                 rootTaskIds: p.rootTaskIds.filter((id) => id !== taskId),
@@ -209,11 +213,7 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
       },
     }));
 
-    // Recalc WBS
-    const project = projects.find((p) =>
-      p.rootTaskIds.includes(taskId) || p.rootTaskIds.includes(newParentId)
-    );
-    if (project) recalcWBS(project);
+    recalcWBS(project);
   };
 
   // -----------------------------
@@ -225,6 +225,11 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
 
     const parent = tasks[task.parentId];
     const grandParentId = parent.parentId;
+
+    const project = projects.find((p) =>
+      p.rootTaskIds.includes(parent.id)
+    );
+    if (!project) return;
 
     // Remove from parent
     setTasks((prev) => ({
@@ -254,21 +259,14 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
 
       setProjects((prev) =>
         prev.map((p) =>
-          p.rootTaskIds.includes(parent.id)
-            ? {
-                ...p,
-                rootTaskIds: [...p.rootTaskIds, taskId],
-              }
+          p.id === project.id
+            ? { ...p, rootTaskIds: [...p.rootTaskIds, taskId] }
             : p
         )
       );
     }
 
-    // Recalc WBS
-    const project = projects.find((p) =>
-      p.rootTaskIds.includes(parent.id)
-    );
-    if (project) recalcWBS(project);
+    recalcWBS(project);
   };
 
   // -----------------------------

@@ -4,7 +4,6 @@ import { useParams } from "next/navigation";
 import { useProjects } from "../../../context/ProjectContext";
 import TaskTree from "../../../components/tasks/TaskTree";
 
-
 export default function ProjectDetailPage() {
   const { id } = useParams();
   const { getProjectById } = useProjects();
@@ -39,33 +38,70 @@ export default function ProjectDetailPage() {
         <button className="hover:text-slate-900">+ Views</button>
       </div>
 
-      {/* Column Header Bar */}
-      <div className="flex items-center justify-between bg-slate-50 border border-slate-200 rounded px-4 py-2 text-sm font-medium text-slate-700">
-        <div className="flex items-center space-x-8">
-          <span className="w-20">ID</span>
-          <span className="w-64">Task</span>
-          <span className="w-40">Resource</span>
-          <span className="w-32">Status</span>
-          <span className="w-32">% Complete</span>
-          <button className="text-emerald-600 hover:underline">+ Columns</button>
-        </div>
+      {/* Ribbon */}
+      <div className="flex items-center space-x-4 bg-slate-50 border border-slate-200 rounded px-4 py-2 text-slate-700 text-sm">
 
-        <input
-          type="text"
-          placeholder="Search..."
-          className="px-3 py-1 border border-slate-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-        />
+        {/* Bold */}
+        <button className="px-2 py-1 hover:bg-slate-200 rounded font-bold">
+          B
+        </button>
+
+        {/* Italic */}
+        <button className="px-2 py-1 hover:bg-slate-200 rounded italic">
+          I
+        </button>
+
+        {/* Underline */}
+        <button className="px-2 py-1 hover:bg-slate-200 rounded underline">
+          U
+        </button>
+
+        {/* Font Size */}
+        <select className="px-2 py-1 border border-slate-300 rounded">
+          <option>12</option>
+          <option>14</option>
+          <option>16</option>
+          <option>18</option>
+        </select>
+
+        {/* Row Height */}
+        <button className="px-2 py-1 hover:bg-slate-200 rounded">
+          ⇅
+        </button>
+
+        {/* Column Width */}
+        <button className="px-2 py-1 hover:bg-slate-200 rounded">
+          ⇆
+        </button>
+
+        {/* Add Row */}
+        <button className="px-2 py-1 hover:bg-slate-200 rounded">
+          + Row
+        </button>
+
+        {/* Add Column */}
+        <button className="px-2 py-1 hover:bg-slate-200 rounded">
+          + Col
+        </button>
+
+        {/* Paint Can (Pastel Palette) */}
+        <button className="px-2 py-1 hover:bg-slate-200 rounded">
+          🎨
+        </button>
       </div>
 
-      {/* Task Grid Container */}
-      <div className="border border-slate-200 rounded-lg">
-        <div className="divide-y divide-slate-200">
+      {/* Column Header Bar */}
+      <div className="grid grid-cols-[80px_1fr_200px_150px_120px] bg-slate-50 border border-slate-200 rounded text-sm font-medium text-slate-700">
+        <div className="px-4 py-2 border-r border-slate-200">ID</div>
+        <div className="px-4 py-2 border-r border-slate-200">Task</div>
+        <div className="px-4 py-2 border-r border-slate-200">Resource</div>
+        <div className="px-4 py-2 border-r border-slate-200">Status</div>
+        <div className="px-4 py-2">%</div>
+      </div>
 
-          {/* Placeholder — TaskTree will go here */}
-          <div className="p-4 text-slate-400 italic">
-            <TaskTree projectId={project.id} />
-          </div>
-        </div>
+      {/* Task Grid */}
+      <div className="border border-slate-200 rounded-lg divide-y divide-slate-200">
+        <TaskTree projectId={project.id} />
       </div>
     </div>
   );
