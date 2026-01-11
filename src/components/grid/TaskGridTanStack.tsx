@@ -12,11 +12,6 @@ import {
 
 import { taskColumns } from "./columns/taskColumns";
 
-/**
- * Minimal, safe row type.
- * This avoids `any` without forcing a full schema yet.
- * You can tighten this later when your task model stabilizes.
- */
 export type TaskRow = Record<string, unknown>;
 
 interface TaskGridTanStackProps {
@@ -39,7 +34,7 @@ export default function TaskGridTanStack({ data }: TaskGridTanStackProps) {
               {headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
-                  className="text-left px-3 py-2 text-sm font-medium text-gray-600 border-b"
+                  className="text-left px-3 py-2 text-sm font-medium text-gray-600 border-b border-r last:border-r-0"
                 >
                   {flexRender(
                     header.column.columnDef.header,
@@ -57,7 +52,7 @@ export default function TaskGridTanStack({ data }: TaskGridTanStackProps) {
               {row.getVisibleCells().map((cell) => (
                 <td
                   key={cell.id}
-                  className="px-3 py-2 text-sm text-gray-800 border-b"
+                  className="px-3 py-2 text-sm text-gray-800 border-b border-r last:border-r-0"
                 >
                   {flexRender(
                     cell.column.columnDef.cell,
