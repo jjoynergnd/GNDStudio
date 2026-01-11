@@ -30,7 +30,7 @@ const TILE_GROUPS = [
     items: [
       {
         label: "New Project",
-        href: "/projects",
+        href: "/projects/new",
         subtle: "Create a fresh workspace",
         // Later: we can wire this to instant createProject() like your current tile.
       },
@@ -109,7 +109,7 @@ export default function HomePage() {
             shortcuts, and control.
           </p>
         </header>
-
+         
         {/* Tile grid */}
         <section className="grid gap-5 sm:gap-6 lg:gap-7 grid-cols-1 sm:grid-cols-2">
           {TILE_GROUPS.map((group) => (

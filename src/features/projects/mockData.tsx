@@ -1,18 +1,32 @@
-import NewProjectTile from "../../components/home/tiles/NewProjectTile";
-
-export const projects = [
-  { id: 1, name: "My Portfolio", headerColor: "#f87171" },
-  { id: 2, name: "My Projects", headerColor: "#34d399" },
-  { id: 3, name: "My Work", headerColor: "#60a5fa" },
-  { id: 4, name: "Templates", headerColor: "#facc15" },
-
-  // Updated New Project tile
+export const mockTasks = [
   {
-    id: 5,
-    name: "New Project",
-    headerColor: "#f472b6",
-    flipContent: <NewProjectTile />,
+    id: "1",
+    wbs: "1",
+    task: "New Project",
+    resource: "",
+    status: "Not Started",
+    start: "",
+    finish: "",
+    percentComplete: 0,
   },
-
-  { id: 6, name: "Reports", headerColor: "#a78bfa" },
+  {
+    id: "2",
+    wbs: "2",
+    task: "",
+    resource: "",
+    status: "Not Started",
+    start: "",
+    finish: "",
+    percentComplete: 0,
+  },
+  {
+    id: "3",
+    wbs: "3",
+    task: "",
+    resource: "",
+    status: "Not Started",
+    start: "",
+    finish: "",
+    percentComplete: 0,
+  },
 ];
