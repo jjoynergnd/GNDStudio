@@ -1,0 +1,29 @@
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <!-- Gradient Background -->
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#9C2A7A"></stop>
+      <stop offset="50%" stop-color="#E84455"></stop>
+      <stop offset="100%" stop-color="#F77B1F"></stop>
+    </linearGradient>
+  </defs>
+
+  <!-- Circle -->
+  <circle cx="256" cy="256" r="256" fill="url(#grad)"></circle>
+
+  <!-- Eye -->
+  <path d="M256 176c-96 0-168 80-168 80s72 80 168 80 168-80 168-80-72-80-168-80z" fill="#ffffff"></path>
+
+  <!-- Iris -->
+  <circle cx="256" cy="256" r="52" fill="#E84455"></circle>
+  <circle cx="256" cy="256" r="26" fill="#ffffff"></circle>
+
+  <!-- Lashes -->
+  <g stroke="#ffffff" stroke-width="14" stroke-linecap="round">
+    <line x1="180" y1="160" x2="168" y2="132"></line>
+    <line x1="220" y1="148" x2="212" y2="116"></line>
+    <line x1="256" y1="144" x2="256" y2="112"></line>
+    <line x1="292" y1="148" x2="300" y2="116"></line>
+    <line x1="332" y1="160" x2="344" y2="132"></line>
+  </g>
+</svg>

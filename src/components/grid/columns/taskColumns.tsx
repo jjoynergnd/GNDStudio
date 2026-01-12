@@ -45,35 +45,28 @@ export const taskColumns = [
           : "bg-white";
 
       return (
-        <select
-          defaultValue={value}
-          className={`outline-none px-2 py-1 rounded ${getColor(value)}`}
-          onChange={(e) => {
-            const newValue = e.target.value;
-            e.target.className = `outline-none px-2 py-1 rounded ${getColor(
-              newValue
-            )}`;
-          }}
-        >
-          <option>Not Started</option>
-          <option>In Progress</option>
-          <option>Complete</option>
-          <option>Past Due</option>
-        </select>
+        <div className={`rounded px-2 py-1 ${getColor(value)}`}>
+          <select
+            defaultValue={value}
+            className="outline-none bg-white px-1 py-1 rounded w-full"
+            onChange={(e) => {
+              const newValue = e.target.value;
+              const parent = e.target.parentElement;
+              if (parent) {
+                parent.className = `rounded px-2 py-1 ${getColor(newValue)}`;
+              }
+            }}
+          >
+            <option>Not Started</option>
+            <option>In Progress</option>
+            <option>Complete</option>
+            <option>Past Due</option>
+          </select>
+        </div>
       );
     },
   }),
 
-  columnHelper.accessor("start", {
-    header: "Start",
-    cell: ({ getValue }) => (
-      <input
-        type="date"
-        className="bg-transparent outline-none"
-        defaultValue={getValue() as string}
-      />
-    ),
-  }),
 
   columnHelper.accessor("finish", {
     header: "Finish",
