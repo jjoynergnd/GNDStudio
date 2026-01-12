@@ -26,46 +26,67 @@ export default function TaskGridTanStack({ data }: TaskGridTanStackProps) {
   });
 
   return (
-    <div className="border rounded-lg bg-white shadow-sm overflow-auto max-h-[600px] p-0">
-      {/* Padding moved INSIDE so sticky header sits flush at top */}
-      <div className="p-4">
-        <table className="w-full border-collapse">
-          <thead className="bg-gray-100 sticky top-0 z-10 rounded-t-lg border-b border-gray-300">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id} className="group">
-                {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    className="text-left px-3 py-2 text-sm font-medium text-gray-700 border-b border-r last:border-r-0 group-hover:bg-gray-200 transition-colors"
-                  >
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
+    <div className="space-y-4">
 
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} className="hover:bg-gray-50 group">
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className="px-3 py-2 text-sm text-gray-800 border-b border-r last:border-r-0 group-hover:bg-gray-100 transition-colors"
-                  >
-                    {flexRender(
-                      cell.column.columnDef.cell,
-                      cell.getContext()
-                    )}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* Ribbon Menu */}
+      <div className="flex gap-6 border-b pb-2 text-sm font-medium">
+        <span className="text-teal-600 border-b-2 border-teal-600 pb-1 cursor-pointer">
+          List
+        </span>
+        <span className="text-gray-500 hover:text-gray-700 cursor-pointer">
+          Board
+        </span>
+        <span className="text-gray-500 hover:text-gray-700 cursor-pointer">
+          Dashboard
+        </span>
+        <span className="text-gray-500 hover:text-gray-700 cursor-pointer">
+          Gantt
+        </span>
+        <span className="text-gray-500 hover:text-gray-700 cursor-pointer">
+          Calendar
+        </span>
+      </div>
+
+      <div className="border rounded-lg bg-white shadow-sm overflow-auto max-h-[600px] p-0">
+        <div className="p-4">
+          <table className="w-full border-collapse">
+            <thead className="bg-gray-100 sticky top-0 z-10 rounded-t-lg border-b border-gray-300">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id} className="group">
+                  {headerGroup.headers.map((header) => (
+                    <th
+                      key={header.id}
+                      className="text-center px-3 py-2 text-sm font-semibold text-gray-800 border-b border-r last:border-r-0 group-hover:bg-gray-200 transition-colors"
+                    >
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+
+            <tbody>
+              {table.getRowModel().rows.map((row) => (
+                <tr key={row.id} className="hover:bg-gray-50 group">
+                  {row.getVisibleCells().map((cell) => (
+                    <td
+                      key={cell.id}
+                      className="px-3 py-2 text-sm text-gray-800 border-b border-r last:border-r-0 group-hover:bg-gray-100 transition-colors"
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

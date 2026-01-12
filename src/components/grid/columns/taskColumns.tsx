@@ -29,24 +29,31 @@ export const taskColumns = [
     ),
   }),
 
+  // ✅ FIXED — dynamic status color + correct syntax
   columnHelper.accessor("status", {
     header: "Status",
     cell: ({ getValue }) => {
       const value = getValue() as string;
 
-      const color =
-        value === "In Progress"
+      const getColor = (v: string) =>
+        v === "In Progress"
           ? "bg-yellow-100"
-          : value === "Complete"
+          : v === "Complete"
           ? "bg-green-100"
-          : value === "Past Due"
+          : v === "Past Due"
           ? "bg-red-100"
           : "bg-white";
 
       return (
         <select
-          className={`outline-none px-2 py-1 rounded ${color}`}
           defaultValue={value}
+          className={`outline-none px-2 py-1 rounded ${getColor(value)}`}
+          onChange={(e) => {
+            const newValue = e.target.value;
+            e.target.className = `outline-none px-2 py-1 rounded ${getColor(
+              newValue
+            )}`;
+          }}
         >
           <option>Not Started</option>
           <option>In Progress</option>
@@ -56,7 +63,6 @@ export const taskColumns = [
       );
     },
   }),
-
 
   columnHelper.accessor("start", {
     header: "Start",
@@ -91,10 +97,6 @@ export const taskColumns = [
           max={100}
           className="w-16 bg-transparent outline-none"
           defaultValue={value}
-          onChange={(e) => {
-            const v = Number(e.target.value);
-            e.target.value = `${v}`;
-          }}
         />
       );
     },
