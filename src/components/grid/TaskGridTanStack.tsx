@@ -46,9 +46,10 @@ export default function TaskGridTanStack({ data }: TaskGridTanStackProps) {
           Calendar
         </span>
 
-        {/* + View */}
-        <span className="ml-auto text-gray-500 hover:text-gray-700 cursor-pointer">
-          + View
+        {/* Views Icon (now next to Calendar) */}
+        <span className="flex items-center gap-1 text-gray-500 hover:text-gray-700 cursor-pointer">
+          <img src="/Views_Icon.svg" className="w-4 h-4" alt="views icon" />
+          View
         </span>
       </div>
 

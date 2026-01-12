@@ -37,35 +37,43 @@ export const taskColumns = [
 
       const getColor = (v: string) =>
         v === "In Progress"
-          ? "bg-yellow-100"
+          ? "bg-yellow-100 text-yellow-800 border-yellow-300"
           : v === "Complete"
-          ? "bg-green-100"
+          ? "bg-green-100 text-green-800 border-green-300"
           : v === "Past Due"
-          ? "bg-red-100"
-          : "bg-white";
+          ? "bg-red-100 text-red-800 border-red-300"
+          : "bg-gray-100 text-gray-700 border-gray-300";
 
       return (
-        <div className={`rounded px-2 py-1 ${getColor(value)}`}>
+        <div
+          className={`rounded-full border px-3 py-1 inline-block ${getColor(
+            value
+          )}`}
+        >
           <select
             defaultValue={value}
-            className="outline-none bg-white px-1 py-1 rounded w-full"
+            className="outline-none bg-transparent w-full cursor-pointer text-black"
             onChange={(e) => {
               const newValue = e.target.value;
               const parent = e.target.parentElement;
               if (parent) {
-                parent.className = `rounded px-2 py-1 ${getColor(newValue)}`;
+                parent.className = `rounded-full border px-3 py-1 inline-block ${getColor(
+                  newValue
+                )}`;
               }
             }}
           >
-            <option>Not Started</option>
-            <option>In Progress</option>
-            <option>Complete</option>
-            <option>Past Due</option>
+            <option className="text-black">Not Started</option>
+            <option className="text-black">In Progress</option>
+            <option className="text-black">Complete</option>
+            <option className="text-black">Past Due</option>
           </select>
         </div>
       );
     },
   }),
+
+
 
 
   columnHelper.accessor("finish", {

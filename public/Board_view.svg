@@ -1,0 +1,32 @@
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <!-- Board background -->
+  <rect x="32" y="48" width="448" height="384" rx="32" fill="#FBF6F2"></rect>
+
+  <!-- Column headers -->
+  <rect x="32" y="48" width="149" height="72" rx="32" fill="#FF9C9C"></rect>
+  <rect x="181" y="48" width="150" height="72" fill="#FFE27A"></rect>
+  <rect x="331" y="48" width="149" height="72" rx="32" fill="#AEEAF2"></rect>
+
+  <!-- Header lines -->
+  <rect x="72" y="80" width="70" height="12" rx="6" fill="#F17F7F"></rect>
+  <rect x="221" y="80" width="70" height="12" rx="6" fill="#F3C84E"></rect>
+  <rect x="371" y="80" width="70" height="12" rx="6" fill="#6ED3DF"></rect>
+
+  <!-- Column 1 cards -->
+  <rect x="64" y="152" width="96" height="56" rx="12" fill="#FF9C9C"></rect>
+  <rect x="64" y="232" width="96" height="56" rx="12" fill="#FF9C9C"></rect>
+  <rect x="64" y="312" width="96" height="56" rx="12" fill="#FF9C9C"></rect>
+
+  <!-- Column 2 cards -->
+  <rect x="208" y="168" width="96" height="56" rx="12" fill="#FFE27A"></rect>
+  <rect x="208" y="248" width="96" height="56" rx="12" fill="#FFE27A"></rect>
+
+  <!-- Column 3 cards -->
+  <rect x="352" y="168" width="96" height="56" rx="12" fill="#AEEAF2"></rect>
+  <rect x="352" y="248" width="96" height="56" rx="12" fill="#AEEAF2"></rect>
+
+  <!-- Check badge -->
+  <circle cx="416" cy="368" r="56" fill="#B9EFA3"></circle>
+
+  <path d="M388 368l20 20 36-40" fill="none" stroke="#FFFFFF" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>

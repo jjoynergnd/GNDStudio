@@ -1,0 +1,19 @@
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <!-- Corner brackets -->
+  <g stroke="#4A89B0" stroke-width="20" stroke-linecap="round">
+    <path d="M64 96V64h32"></path>
+    <path d="M416 64h32v32"></path>
+    <path d="M96 448H64v-32"></path>
+    <path d="M448 416v32h-32"></path>
+  </g>
+
+  <!-- Pie chart -->
+  <path d="M256 256V64a192 192 0 0 1 166.4 96z" fill="#FF7A8E"></path>
+  <path d="M256 256l166.4-96A192 192 0 0 1 256 448z" fill="#4A89B0"></path>
+  <path d="M256 256V448A192 192 0 0 1 64 256z" fill="#1FD2B8"></path>
+
+  <!-- Bar chart -->
+  <rect x="304" y="304" width="48" height="96" rx="8" fill="#FF7A8E"></rect>
+  <rect x="360" y="256" width="48" height="144" rx="8" fill="#FFC83D"></rect>
+  <rect x="416" y="208" width="48" height="192" rx="8" fill="#4A89B0"></rect>
+</svg>
