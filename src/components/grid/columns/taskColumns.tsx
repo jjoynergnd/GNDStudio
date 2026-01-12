@@ -31,18 +31,32 @@ export const taskColumns = [
 
   columnHelper.accessor("status", {
     header: "Status",
-    cell: ({ getValue }) => (
-      <select
-        className="bg-transparent outline-none"
-        defaultValue={getValue() as string}
-      >
-        <option>Not Started</option>
-        <option>In Progress</option>
-        <option>Complete</option>
-        <option>Past Due</option>
-      </select>
-    ),
+    cell: ({ getValue }) => {
+      const value = getValue() as string;
+
+      const color =
+        value === "In Progress"
+          ? "bg-yellow-100"
+          : value === "Complete"
+          ? "bg-green-100"
+          : value === "Past Due"
+          ? "bg-red-100"
+          : "bg-white";
+
+      return (
+        <select
+          className={`outline-none px-2 py-1 rounded ${color}`}
+          defaultValue={value}
+        >
+          <option>Not Started</option>
+          <option>In Progress</option>
+          <option>Complete</option>
+          <option>Past Due</option>
+        </select>
+      );
+    },
   }),
+
 
   columnHelper.accessor("start", {
     header: "Start",
