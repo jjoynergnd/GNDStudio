@@ -1,6 +1,5 @@
 // @react-compiler-disable
 /* eslint-disable react-hooks/incompatible-library */
-
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -11,7 +10,6 @@ import {
   ColumnDef,
   VisibilityState,
 } from "@tanstack/react-table";
-
 import {
   DndContext,
   closestCenter,
@@ -26,7 +24,6 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-
 import Image from "next/image";
 
 import AddColumnModal from "@/components/modals/AddColumnModal";
@@ -87,7 +84,6 @@ export default function TaskGridTanStack({
 
     const oldIndex = rows.findIndex((r) => r.id === active.id);
     const newIndex = rows.findIndex((r) => r.id === over.id);
-
     if (oldIndex === -1 || newIndex === -1) return;
 
     const newData = arrayMove(rows, oldIndex, newIndex);
@@ -97,7 +93,7 @@ export default function TaskGridTanStack({
 
   return (
     <div className="space-y-4">
-      {/* Ribbon */}
+      {/* View ribbon */}
       <div className="flex items-center gap-6 border-b pb-2 text-sm font-medium text-gray-700">
         <span className="flex items-center gap-2 text-teal-600 border-b-2 border-teal-600 pb-1 cursor-pointer">
           <Image
@@ -109,7 +105,6 @@ export default function TaskGridTanStack({
           />
           List
         </span>
-
         <span className="flex items-center gap-2 hover:text-gray-900 cursor-pointer">
           <Image
             src="/board_view.svg"
@@ -120,7 +115,6 @@ export default function TaskGridTanStack({
           />
           Board
         </span>
-
         <span className="flex items-center gap-2 hover:text-gray-900 cursor-pointer">
           <Image
             src="/dashboard_view.svg"
@@ -131,7 +125,6 @@ export default function TaskGridTanStack({
           />
           Dashboard
         </span>
-
         <span className="flex items-center gap-2 hover:text-gray-900 cursor-pointer">
           <Image
             src="/gantt_view.webp"
@@ -142,7 +135,6 @@ export default function TaskGridTanStack({
           />
           Gantt
         </span>
-
         <span className="flex items-center gap-2 hover:text-gray-900 cursor-pointer">
           <Image
             src="/calendar_view.webp"
@@ -153,7 +145,6 @@ export default function TaskGridTanStack({
           />
           Calendar
         </span>
-
         <span className="flex items-center gap-1 hover:text-gray-900 cursor-pointer">
           <Image
             src="/more_views.svg"
@@ -166,7 +157,50 @@ export default function TaskGridTanStack({
         </span>
       </div>
 
-      {/* Grid container (relative so floating button anchors correctly) */}
+      {/* Columns visibility button + menu (aligned right, above grid) */}
+      <div className="flex justify-end">
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setShowColumnMenu((prev) => !prev)}
+            className="inline-flex items-center gap-1 rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 cursor-pointer"
+          >
+            Columns
+            <span className="text-[10px]">▾</span>
+          </button>
+
+          {showColumnMenu && (
+            <div className="absolute right-0 mt-2 w-52 rounded-lg border border-gray-200 bg-white shadow-lg text-xs text-gray-800 z-30">
+              <div className="max-h-60 overflow-auto py-2">
+                {table.getAllLeafColumns().map((column) => {
+                  const columnId = column.id;
+                  const header =
+                    typeof column.columnDef.header === "string"
+                      ? column.columnDef.header
+                      : columnId;
+
+                  return (
+                    <label
+                      key={columnId}
+                      className="flex items-center gap-2 px-3 py-1 hover:bg-gray-50 cursor-pointer"
+                    >
+                      <input
+                        type="checkbox"
+                        className="h-3 w-3 cursor-pointer"
+                        checked={column.getIsVisible()}
+                        onChange={column.getToggleVisibilityHandler()}
+                      />
+                      <span className="truncate">{header}</span>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Grid container */}
       <div className="relative border rounded-lg bg-white shadow-sm overflow-auto max-h-[600px] p-0">
         <DndContext
           collisionDetection={closestCenter}
@@ -206,7 +240,6 @@ export default function TaskGridTanStack({
                               header.getContext()
                             )}
                           </div>
-
                           {canResize && (
                             <div
                               onMouseDown={header.getResizeHandler()}
@@ -258,47 +291,6 @@ export default function TaskGridTanStack({
             </SortableContext>
           </table>
         </DndContext>
-
-        {/* Floating Columns button */}
-        <div className="absolute bottom-3 right-3">
-          <button
-            type="button"
-            onClick={() => setShowColumnMenu((prev) => !prev)}
-            className="inline-flex items-center gap-1 rounded-full border border-gray-300 bg-white px-3 py-1 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 cursor-pointer"
-          >
-            Columns
-            <span className="text-[10px]">▾</span>
-          </button>
-
-          {showColumnMenu && (
-            <div className="mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg text-xs text-gray-800">
-              <div className="max-h-60 overflow-auto py-2">
-                {table.getAllLeafColumns().map((column) => {
-                  const columnId = column.id;
-                  const header =
-                    typeof column.columnDef.header === "string"
-                      ? column.columnDef.header
-                      : columnId;
-
-                  return (
-                    <label
-                      key={columnId}
-                      className="flex items-center gap-2 px-3 py-1 hover:bg-gray-50 cursor-pointer"
-                    >
-                      <input
-                        type="checkbox"
-                        className="h-3 w-3 cursor-pointer"
-                        checked={column.getIsVisible()}
-                        onChange={column.getToggleVisibilityHandler()}
-                      />
-                      <span className="truncate">{header}</span>
-                    </label>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-        </div>
       </div>
 
       <AddColumnModal
