@@ -29,7 +29,7 @@ export const taskColumns = [
     ),
   }),
 
-  // ⭐ NEW — Start column (was missing)
+  // ⭐ Start column
   columnHelper.accessor("start", {
     header: "Start",
     cell: ({ getValue }) => (
@@ -41,7 +41,19 @@ export const taskColumns = [
     ),
   }),
 
-  // ⭐ Status column with min width
+  // ⭐ Finish column (moved above Status)
+  columnHelper.accessor("finish", {
+    header: "Finish",
+    cell: ({ getValue }) => (
+      <input
+        type="date"
+        className="bg-transparent outline-none min-w-[120px]"
+        defaultValue={getValue() as string}
+      />
+    ),
+  }),
+
+  // ⭐ Status column
   columnHelper.accessor("status", {
     header: "Status",
     cell: ({ getValue }) => {
@@ -83,18 +95,6 @@ export const taskColumns = [
         </div>
       );
     },
-  }),
-
-  // ⭐ Finish column with min width
-  columnHelper.accessor("finish", {
-    header: "Finish",
-    cell: ({ getValue }) => (
-      <input
-        type="date"
-        className="bg-transparent outline-none min-w-[120px]"
-        defaultValue={getValue() as string}
-      />
-    ),
   }),
 
   columnHelper.accessor("percentComplete", {
