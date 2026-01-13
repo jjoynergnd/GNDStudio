@@ -29,7 +29,19 @@ export const taskColumns = [
     ),
   }),
 
-  // ✅ FIXED — dynamic status color + correct syntax
+  // ⭐ NEW — Start column (was missing)
+  columnHelper.accessor("start", {
+    header: "Start",
+    cell: ({ getValue }) => (
+      <input
+        type="date"
+        className="bg-transparent outline-none min-w-[120px]"
+        defaultValue={getValue() as string}
+      />
+    ),
+  }),
+
+  // ⭐ Status column with min width
   columnHelper.accessor("status", {
     header: "Status",
     cell: ({ getValue }) => {
@@ -46,42 +58,40 @@ export const taskColumns = [
 
       return (
         <div
-          className={`rounded-full border px-3 py-1 inline-block ${getColor(
+          className={`rounded-full border px-3 py-1 inline-block min-w-[140px] ${getColor(
             value
           )}`}
         >
           <select
             defaultValue={value}
-            className="outline-none bg-transparent w-full cursor-pointer text-black"
+            className="outline-none bg-transparent w-full cursor-pointer text-black [&>option]:text-black"
             onChange={(e) => {
               const newValue = e.target.value;
               const parent = e.target.parentElement;
               if (parent) {
-                parent.className = `rounded-full border px-3 py-1 inline-block ${getColor(
+                parent.className = `rounded-full border px-3 py-1 inline-block min-w-[140px] ${getColor(
                   newValue
                 )}`;
               }
             }}
           >
-            <option className="text-black">Not Started</option>
-            <option className="text-black">In Progress</option>
-            <option className="text-black">Complete</option>
-            <option className="text-black">Past Due</option>
+            <option>Not Started</option>
+            <option>In Progress</option>
+            <option>Complete</option>
+            <option>Past Due</option>
           </select>
         </div>
       );
     },
   }),
 
-
-
-
+  // ⭐ Finish column with min width
   columnHelper.accessor("finish", {
     header: "Finish",
     cell: ({ getValue }) => (
       <input
         type="date"
-        className="bg-transparent outline-none"
+        className="bg-transparent outline-none min-w-[120px]"
         defaultValue={getValue() as string}
       />
     ),

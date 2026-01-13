@@ -1,47 +1,35 @@
-import React, { useState } from 'react';
-import TaskGridTanStack from '@/components/grid/TaskGridTanStack';
-import { TaskGridToolbar } from '@/components/grid/TaskGridToolbar';
-import { Task } from '@/types/tasks';
-import { mockTasks } from '@/features/projects/mockData';
+"use client";
+
+import React, { useState } from "react";
+import TaskGridTanStack from "@/components/grid/TaskGridTanStack";
+import { TaskGridToolbar } from "@/components/grid/TaskGridToolbar";
+import { TreeTask } from "@/types/tasks";
+import { mockTasks } from "@/features/projects/mockData";
 
 const ProjectPage: React.FC = () => {
-  // ✅ Use plain Task[] only
-  const [tasks, setTasks] = useState<Task[]>(mockTasks);
+  // Store tasks as TreeTask[]
+  const [tasks, setTasks] = useState<TreeTask[]>(mockTasks);
 
   const handleAddTask = () => {
-    const newTask: Task = {
+    const newTask: TreeTask = {
       id: `task-${Date.now()}`,
-      name: 'New Task',
-      status: 'Not Started',
-      subTasks: [],
-      assignee: undefined,
-      dueDate: undefined,
-      priority: undefined,
+      wbs: "",
+      task: "New Task",
+      resource: "",
+      status: "Not Started",
+      start: "",              // ✅ REQUIRED FIELD ADDED
+      finish: "",
+      percentComplete: 0,
     };
-    setTasks(prev => [...prev, newTask]);
+    setTasks((prev) => [...prev, newTask]);
   };
 
   const handleAddSubtask = () => {
-    if (!tasks[0]) return;
-
-    const subtask: Task = {
-      id: `subtask-${Date.now()}`,
-      name: 'New Subtask',
-      status: 'Not Started',
-      subTasks: [],
-      assignee: undefined,
-      dueDate: undefined,
-      priority: undefined,
-    };
-
-    // Add subtask to first task's subTasks array
-    const updatedTasks = [...tasks];
-    updatedTasks[0].subTasks = [...(updatedTasks[0].subTasks ?? []), subtask];
-    setTasks(updatedTasks);
+    console.log("Subtasks not implemented yet");
   };
 
-  const handleExpandAll = () => console.log('Expand all clicked');
-  const handleCollapseAll = () => console.log('Collapse all clicked');
+  const handleExpandAll = () => console.log("Expand all clicked");
+  const handleCollapseAll = () => console.log("Collapse all clicked");
 
   return (
     <div className="p-4">
@@ -54,7 +42,7 @@ const ProjectPage: React.FC = () => {
         onCollapseAll={handleCollapseAll}
       />
 
-      <TaskGridTanStack tasks={tasks} />
+      <TaskGridTanStack data={tasks} />
     </div>
   );
 };
