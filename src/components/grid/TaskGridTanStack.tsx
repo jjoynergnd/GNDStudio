@@ -9,6 +9,7 @@ import {
   getCoreRowModel,
   flexRender,
   ColumnDef,
+  VisibilityState,
 } from "@tanstack/react-table";
 
 import {
@@ -44,6 +45,8 @@ export default function TaskGridTanStack({
 }: TaskGridTanStackProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const [rows, setRows] = useState<TaskRow[]>(data);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [showColumnMenu, setShowColumnMenu] = useState(false);
 
   // Keep local rows in sync if parent data changes
   useEffect(() => {
@@ -54,13 +57,18 @@ export default function TaskGridTanStack({
     data: rows,
     columns: taskColumns as ColumnDef<TaskRow, unknown>[],
     getCoreRowModel: getCoreRowModel(),
+    enableColumnResizing: true,
+    columnResizeMode: "onChange",
+    state: {
+      columnVisibility,
+    },
+    onColumnVisibilityChange: setColumnVisibility,
   });
 
-  // Better drag activation: click-and-hold / press-and-hold
-  // Better drag activation: click-and-hold / press-and-hold
+  // Better drag activation: small move for mouse, press-and-hold for touch
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
-      distance: 5, // small movement required
+      distance: 5,
     },
   });
 
@@ -72,7 +80,6 @@ export default function TaskGridTanStack({
   });
 
   const sensors = useSensors(mouseSensor, touchSensor);
-
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -159,42 +166,60 @@ export default function TaskGridTanStack({
         </span>
       </div>
 
-      <div className="border rounded-lg bg-white shadow-sm overflow-auto max-h-[600px] p-0">
+      {/* Grid container (relative so floating button anchors correctly) */}
+      <div className="relative border rounded-lg bg-white shadow-sm overflow-auto max-h-[600px] p-0">
         <DndContext
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
           sensors={sensors}
         >
           <table className="min-w-full table-auto border-collapse">
-            <thead className="bg-gray-100 sticky top-0 z-10 rounded-t-lg border-b border-gray-300">
+            <thead className="bg-gray-100 sticky top-0 z-20 rounded-t-lg border-b border-gray-300">
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id} className="group">
-                  {headerGroup.headers.map((header, index) => (
-                    <th
-                      key={header.id}
-                      className={[
-                        "text-center px-3 py-2 text-sm font-semibold text-gray-800 border-b border-r last:border-r-0 whitespace-nowrap",
-                        index === 0
-                          ? "sticky left-0 bg-gray-100 z-20"
-                          : "",
-                      ]
-                        .filter(Boolean)
-                        .join(" ")}
-                    >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                    </th>
-                  ))}
+                  {headerGroup.headers.map((header, index) => {
+                    const canResize = header.column.getCanResize();
+                    const isResizing = header.column.getIsResizing();
 
-                  {/* ⭐ Sticky + Column */}
-                  <th
-                    className="sticky right-0 bg-gray-100 px-3 py-2 border-l cursor-pointer hover:bg-gray-200 z-20"
-                    onClick={() => setModalOpen(true)}
-                  >
-                    +
-                  </th>
+                    return (
+                      <th
+                        key={header.id}
+                        className={[
+                          "text-center px-3 py-2 text-sm font-semibold text-gray-800 border-b border-r last:border-r-0 whitespace-nowrap select-none cursor-pointer",
+                          index === 0
+                            ? "sticky left-0 bg-gray-100 z-30"
+                            : "",
+                        ]
+                          .filter(Boolean)
+                          .join(" ")}
+                        style={{
+                          position: header.column.getIsPinned()
+                            ? "sticky"
+                            : undefined,
+                          width: header.getSize(),
+                        }}
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex-1">
+                            {flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                          </div>
+
+                          {canResize && (
+                            <div
+                              onMouseDown={header.getResizeHandler()}
+                              onTouchStart={header.getResizeHandler()}
+                              className={`w-1 h-6 ml-1 cursor-col-resize select-none ${
+                                isResizing ? "bg-teal-500" : "bg-gray-300"
+                              }`}
+                            />
+                          )}
+                        </div>
+                      </th>
+                    );
+                  })}
                 </tr>
               ))}
             </thead>
@@ -210,13 +235,16 @@ export default function TaskGridTanStack({
                       <td
                         key={cell.id}
                         className={[
-                          "px-3 py-2 text-sm text-gray-800 border-b border-r last:border-r-0 whitespace-nowrap",
+                          "px-3 py-2 text-sm text-gray-800 border-b border-r last:border-r-0 whitespace-nowrap cursor-pointer",
                           index === 0
                             ? "sticky left-0 bg-white z-10"
                             : "",
                         ]
                           .filter(Boolean)
                           .join(" ")}
+                        style={{
+                          width: cell.column.getSize(),
+                        }}
                       >
                         {flexRender(
                           cell.column.columnDef.cell,
@@ -224,15 +252,53 @@ export default function TaskGridTanStack({
                         )}
                       </td>
                     ))}
-
-                    {/* Empty sticky cell under + column */}
-                    <td className="sticky right-0 bg-white border-l z-10"></td>
                   </DraggableRow>
                 ))}
               </tbody>
             </SortableContext>
           </table>
         </DndContext>
+
+        {/* Floating Columns button */}
+        <div className="absolute bottom-3 right-3">
+          <button
+            type="button"
+            onClick={() => setShowColumnMenu((prev) => !prev)}
+            className="inline-flex items-center gap-1 rounded-full border border-gray-300 bg-white px-3 py-1 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 cursor-pointer"
+          >
+            Columns
+            <span className="text-[10px]">▾</span>
+          </button>
+
+          {showColumnMenu && (
+            <div className="mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg text-xs text-gray-800">
+              <div className="max-h-60 overflow-auto py-2">
+                {table.getAllLeafColumns().map((column) => {
+                  const columnId = column.id;
+                  const header =
+                    typeof column.columnDef.header === "string"
+                      ? column.columnDef.header
+                      : columnId;
+
+                  return (
+                    <label
+                      key={columnId}
+                      className="flex items-center gap-2 px-3 py-1 hover:bg-gray-50 cursor-pointer"
+                    >
+                      <input
+                        type="checkbox"
+                        className="h-3 w-3 cursor-pointer"
+                        checked={column.getIsVisible()}
+                        onChange={column.getToggleVisibilityHandler()}
+                      />
+                      <span className="truncate">{header}</span>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       <AddColumnModal
