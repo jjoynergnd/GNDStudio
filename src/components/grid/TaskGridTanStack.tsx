@@ -85,8 +85,17 @@ export default function TaskGridTanStack({
     onReorder?.(newData);
   };
 
+  // Placeholder WBS actions
+  const handleIndent = () => {
+    console.log("Indent selected rows (WBS logic coming soon)");
+  };
+
+  const handleOutdent = () => {
+    console.log("Outdent selected rows (WBS logic coming soon)");
+  };
+
   return (
-    <div className="space-y-4 grid-container">
+    <div className="space-y-3 grid-container">
       {/* Cursor override styles */}
       <style jsx>{`
         .grid-container :global(*) {
@@ -148,11 +157,15 @@ export default function TaskGridTanStack({
         </span>
       </div>
 
-      {/* NEW: Formatting Ribbon */}
-      <FormattingRibbon />
+      {/* Formatting Ribbon */}
+      <FormattingRibbon
+        onIndent={handleIndent}
+        onOutdent={handleOutdent}
+        onAddColumn={() => setModalOpen(true)}
+      />
 
       {/* Columns visibility button */}
-      <div className="flex justify-end">
+      <div className="flex justify-end -mt-1">
         <div className="relative">
           <button
             type="button"
