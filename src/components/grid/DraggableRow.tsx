@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import type { Row } from "@tanstack/react-table";
@@ -23,10 +23,23 @@ export default function DraggableRow({ row, children }: DraggableRowProps) {
     id: row.original.id,
   });
 
+  // Force cursor to "grabbing" globally while dragging
+  useEffect(() => {
+    if (isDragging) {
+      const previousCursor = document.body.style.cursor;
+      document.body.style.cursor = "grabbing";
+
+      return () => {
+        document.body.style.cursor = previousCursor;
+      };
+    }
+  }, [isDragging]);
+
   const style: React.CSSProperties = {
     transform: CSS.Transform.toString(transform),
     transition,
-    cursor: isDragging ? "grabbing" : "grab",
+    // Let hover/inputs behave normally; focus on drag state only
+    cursor: isDragging ? "grabbing" : undefined,
     zIndex: isDragging ? 50 : undefined,
     position: "relative",
     background: isDragging ? "rgba(255,255,255,0.9)" : undefined,
@@ -38,6 +51,7 @@ export default function DraggableRow({ row, children }: DraggableRowProps) {
       style={style}
       {...attributes}
       {...listeners}
+      data-dragging={isDragging ? "true" : "false"}
       className="
         group
         select-none

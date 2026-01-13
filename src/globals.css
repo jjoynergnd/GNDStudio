@@ -36,3 +36,29 @@ body {
 .rotate-y-180 {
   transform: rotateY(180deg);
 }
+/* Airtable-style cursor model for the grid */
+.grid-container * {
+  cursor: pointer !important;
+}
+
+.grid-container input,
+.grid-container textarea {
+  cursor: text !important;
+}
+
+.grid-container .cursor-col-resize {
+  cursor: col-resize !important;
+}
+
+.grid-container [data-dragging="true"],
+.grid-container [data-dragging="true"] * {
+  cursor: grabbing !important;
+}
+/* Force pointer cursor on hover inside the grid */
+.grid-container td,
+.grid-container th,
+.grid-container span,
+.grid-container div,
+.grid-container svg {
+  cursor: pointer !important;
+}

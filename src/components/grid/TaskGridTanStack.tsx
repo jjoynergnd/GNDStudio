@@ -30,6 +30,7 @@ import AddColumnModal from "@/components/modals/AddColumnModal";
 import { taskColumns } from "./columns/taskColumns";
 import DraggableRow from "./DraggableRow";
 import { TaskRow } from "@/types/tasks";
+import FormattingRibbon from "@/components/grid/FormattingRibbon";
 
 interface TaskGridTanStackProps {
   data: TaskRow[];
@@ -45,7 +46,6 @@ export default function TaskGridTanStack({
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [showColumnMenu, setShowColumnMenu] = useState(false);
 
-  // Keep local rows in sync if parent data changes
   useEffect(() => {
     setRows(data);
   }, [data]);
@@ -62,18 +62,12 @@ export default function TaskGridTanStack({
     onColumnVisibilityChange: setColumnVisibility,
   });
 
-  // Better drag activation: small move for mouse, press-and-hold for touch
   const mouseSensor = useSensor(MouseSensor, {
-    activationConstraint: {
-      distance: 5,
-    },
+    activationConstraint: { distance: 5 },
   });
 
   const touchSensor = useSensor(TouchSensor, {
-    activationConstraint: {
-      delay: 150,
-      tolerance: 5,
-    },
+    activationConstraint: { delay: 150, tolerance: 5 },
   });
 
   const sensors = useSensors(mouseSensor, touchSensor);
@@ -92,72 +86,72 @@ export default function TaskGridTanStack({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 grid-container">
+      {/* Cursor override styles */}
+      <style jsx>{`
+        .grid-container :global(*) {
+          cursor: pointer !important;
+        }
+        .grid-container :global(input),
+        .grid-container :global(textarea) {
+          cursor: text !important;
+        }
+        .grid-container :global(.cursor-col-resize) {
+          cursor: col-resize !important;
+        }
+        .grid-container :global([data-dragging="true"]),
+        .grid-container :global([data-dragging="true"] *) {
+          cursor: grabbing !important;
+        }
+      `}</style>
+
       {/* View ribbon */}
       <div className="flex items-center gap-6 border-b pb-2 text-sm font-medium text-gray-700">
         <span className="flex items-center gap-2 text-teal-600 border-b-2 border-teal-600 pb-1 cursor-pointer">
-          <Image
-            src="/list_view.svg"
-            alt="List"
-            width={16}
-            height={16}
-            className="opacity-100 drop-shadow-sm"
-          />
+          <Image src="/list_view.svg" alt="List" width={16} height={16} />
           List
         </span>
+
         <span className="flex items-center gap-2 hover:text-gray-900 cursor-pointer">
-          <Image
-            src="/board_view.svg"
-            alt="Board"
-            width={16}
-            height={16}
-            className="opacity-100 drop-shadow-sm"
-          />
+          <Image src="/board_view.svg" alt="Board" width={16} height={16} />
           Board
         </span>
+
         <span className="flex items-center gap-2 hover:text-gray-900 cursor-pointer">
           <Image
             src="/dashboard_view.svg"
             alt="Dashboard"
             width={16}
             height={16}
-            className="opacity-100 drop-shadow-sm"
           />
           Dashboard
         </span>
+
         <span className="flex items-center gap-2 hover:text-gray-900 cursor-pointer">
-          <Image
-            src="/gantt_view.webp"
-            alt="Gantt"
-            width={16}
-            height={16}
-            className="opacity-100 drop-shadow-sm"
-          />
+          <Image src="/gantt_view.webp" alt="Gantt" width={16} height={16} />
           Gantt
         </span>
+
         <span className="flex items-center gap-2 hover:text-gray-900 cursor-pointer">
           <Image
             src="/calendar_view.webp"
             alt="Calendar"
             width={16}
             height={16}
-            className="opacity-100 drop-shadow-sm"
           />
           Calendar
         </span>
+
         <span className="flex items-center gap-1 hover:text-gray-900 cursor-pointer">
-          <Image
-            src="/more_views.svg"
-            alt="Views"
-            width={16}
-            height={16}
-            className="opacity-100 drop-shadow-sm"
-          />
+          <Image src="/more_views.svg" alt="Views" width={16} height={16} />
           Views
         </span>
       </div>
 
-      {/* Columns visibility button + menu (aligned right, above grid) */}
+      {/* NEW: Formatting Ribbon */}
+      <FormattingRibbon />
+
+      {/* Columns visibility button */}
       <div className="flex justify-end">
         <div className="relative">
           <button
@@ -165,8 +159,7 @@ export default function TaskGridTanStack({
             onClick={() => setShowColumnMenu((prev) => !prev)}
             className="inline-flex items-center gap-1 bg-transparent px-1 py-1 text-xs font-semibold tracking-wide text-gray-800 hover:text-gray-900 focus:outline-none cursor-pointer"
           >
-            Columns
-            <span className="text-[10px]">▾</span>
+            Columns <span className="text-[10px]">▾</span>
           </button>
 
           {showColumnMenu && (
@@ -200,7 +193,7 @@ export default function TaskGridTanStack({
         </div>
       </div>
 
-      {/* Grid container */}
+      {/* Grid */}
       <div className="relative border rounded-lg bg-white shadow-sm overflow-auto max-h-[600px] p-0">
         <DndContext
           collisionDetection={closestCenter}
@@ -208,14 +201,9 @@ export default function TaskGridTanStack({
           sensors={sensors}
         >
           <table className="min-w-full table-auto border-collapse">
-            {/* 
-              pointer-events-none on thead prevents the sticky header
-              from blocking drag on the first row. We re-enable pointer
-              events on inner header content so resize still works.
-            */}
             <thead className="bg-gray-100 sticky top-0 z-20 rounded-t-lg border-b border-gray-300 pointer-events-none">
               {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id} className="group">
+                <tr key={headerGroup.id}>
                   {headerGroup.headers.map((header, index) => {
                     const canResize = header.column.getCanResize();
                     const isResizing = header.column.getIsResizing();
@@ -224,17 +212,12 @@ export default function TaskGridTanStack({
                       <th
                         key={header.id}
                         className={[
-                          "text-center px-3 py-2 text-sm font-semibold text-gray-800 border-b border-r last:border-r-0 whitespace-nowrap select-none cursor-pointer",
-                          index === 0
-                            ? "sticky left-0 bg-gray-100 z-30"
-                            : "",
+                          "text-center px-3 py-2 text-sm font-semibold text-gray-800 border-b border-r last:border-r-0 whitespace-nowrap select-none",
+                          index === 0 ? "sticky left-0 bg-gray-100 z-30" : "",
                         ]
                           .filter(Boolean)
                           .join(" ")}
                         style={{
-                          position: header.column.getIsPinned()
-                            ? "sticky"
-                            : undefined,
                           width: header.getSize(),
                         }}
                       >
@@ -245,6 +228,7 @@ export default function TaskGridTanStack({
                               header.getContext()
                             )}
                           </div>
+
                           {canResize && (
                             <div
                               onMouseDown={header.getResizeHandler()}
@@ -273,10 +257,8 @@ export default function TaskGridTanStack({
                       <td
                         key={cell.id}
                         className={[
-                          "px-3 py-2 text-sm text-gray-800 border-b border-r last:border-r-0 whitespace-nowrap cursor-pointer",
-                          index === 0
-                            ? "sticky left-0 bg-white z-10"
-                            : "",
+                          "px-3 py-2 text-sm text-gray-800 border-b border-r last:border-r-0 whitespace-nowrap",
+                          index === 0 ? "sticky left-0 bg-white z-10" : "",
                         ]
                           .filter(Boolean)
                           .join(" ")}
@@ -298,10 +280,7 @@ export default function TaskGridTanStack({
         </DndContext>
       </div>
 
-      <AddColumnModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-      />
+      <AddColumnModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
     </div>
   );
 }
