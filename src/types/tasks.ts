@@ -1,10 +1,4 @@
-export type TreeTask = {
+export type TaskRow = {
   id: string;
-  wbs: string;
-  task: string;
-  resource: string;
-  status: string;
-  start: string;
-  finish: string;
-  percentComplete: number;
+  [key: string]: unknown;
 };

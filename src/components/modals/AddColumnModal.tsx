@@ -7,17 +7,28 @@ interface AddColumnModalProps {
   onClose: () => void;
 }
 
-export default function AddColumnModal({ isOpen, onClose }: AddColumnModalProps) {
+export default function AddColumnModal({
+  isOpen,
+  onClose,
+}: AddColumnModalProps) {
   if (!isOpen) return null;
+
+  const handleBackdropClick = () => {
+    onClose();
+  };
+
+  const handleContentClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    e.stopPropagation();
+  };
 
   return (
     <div
       className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
-      onClick={onClose}
+      onClick={handleBackdropClick}
     >
       <div
         className="bg-white rounded-lg shadow-lg w-[360px] p-5"
-        onClick={(e) => e.stopPropagation()}
+        onClick={handleContentClick}
       >
         <h2 className="text-lg font-semibold mb-3">Add Column</h2>
 

@@ -1,7 +1,7 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import { TreeTask } from "@/types/tasks";
+import { TaskRow } from "@/types/tasks";
 
-const columnHelper = createColumnHelper<TreeTask>();
+const columnHelper = createColumnHelper<TaskRow>();
 
 export const taskColumns = [
   columnHelper.accessor("wbs", {
@@ -41,7 +41,7 @@ export const taskColumns = [
     ),
   }),
 
-  // ⭐ Finish column (moved above Status)
+  // ⭐ Finish column
   columnHelper.accessor("finish", {
     header: "Finish",
     cell: ({ getValue }) => (
@@ -57,7 +57,7 @@ export const taskColumns = [
   columnHelper.accessor("status", {
     header: "Status",
     cell: ({ getValue }) => {
-      const value = getValue() as string;
+      const value = (getValue() as string) ?? "Not Started";
 
       const getColor = (v: string) =>
         v === "In Progress"
@@ -100,7 +100,7 @@ export const taskColumns = [
   columnHelper.accessor("percentComplete", {
     header: "% Complete",
     cell: ({ getValue }) => {
-      const value = getValue() as number;
+      const value = (getValue() as number) ?? 0;
       return (
         <input
           type="number"

@@ -3,21 +3,20 @@
 import React, { useState } from "react";
 import TaskGridTanStack from "@/components/grid/TaskGridTanStack";
 import { TaskGridToolbar } from "@/components/grid/TaskGridToolbar";
-import { TreeTask } from "@/types/tasks";
+import { TaskRow } from "@/types/tasks";
 import { mockTasks } from "@/features/projects/mockData";
 
 const ProjectPage: React.FC = () => {
-  // Store tasks as TreeTask[]
-  const [tasks, setTasks] = useState<TreeTask[]>(mockTasks);
+  const [tasks, setTasks] = useState<TaskRow[]>(mockTasks);
 
   const handleAddTask = () => {
-    const newTask: TreeTask = {
+    const newTask: TaskRow = {
       id: `task-${Date.now()}`,
       wbs: "",
       task: "New Task",
       resource: "",
       status: "Not Started",
-      start: "",              // ✅ REQUIRED FIELD ADDED
+      start: "",
       finish: "",
       percentComplete: 0,
     };
@@ -31,6 +30,10 @@ const ProjectPage: React.FC = () => {
   const handleExpandAll = () => console.log("Expand all clicked");
   const handleCollapseAll = () => console.log("Collapse all clicked");
 
+  const handleReorder = (newData: TaskRow[]) => {
+    setTasks(newData);
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Project Tasks</h1>
@@ -42,7 +45,7 @@ const ProjectPage: React.FC = () => {
         onCollapseAll={handleCollapseAll}
       />
 
-      <TaskGridTanStack data={tasks} />
+      <TaskGridTanStack data={tasks} onReorder={handleReorder} />
     </div>
   );
 };
