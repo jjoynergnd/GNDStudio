@@ -163,7 +163,7 @@ export default function TaskGridTanStack({
           <button
             type="button"
             onClick={() => setShowColumnMenu((prev) => !prev)}
-            className="inline-flex items-center gap-1 rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 cursor-pointer"
+            className="inline-flex items-center gap-1 bg-transparent px-1 py-1 text-xs font-semibold tracking-wide text-gray-800 hover:text-gray-900 focus:outline-none cursor-pointer"
           >
             Columns
             <span className="text-[10px]">▾</span>
@@ -208,7 +208,12 @@ export default function TaskGridTanStack({
           sensors={sensors}
         >
           <table className="min-w-full table-auto border-collapse">
-            <thead className="bg-gray-100 sticky top-0 z-20 rounded-t-lg border-b border-gray-300">
+            {/* 
+              pointer-events-none on thead prevents the sticky header
+              from blocking drag on the first row. We re-enable pointer
+              events on inner header content so resize still works.
+            */}
+            <thead className="bg-gray-100 sticky top-0 z-20 rounded-t-lg border-b border-gray-300 pointer-events-none">
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id} className="group">
                   {headerGroup.headers.map((header, index) => {
@@ -233,7 +238,7 @@ export default function TaskGridTanStack({
                           width: header.getSize(),
                         }}
                       >
-                        <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center justify-between gap-2 pointer-events-auto">
                           <div className="flex-1">
                             {flexRender(
                               header.column.columnDef.header,
@@ -261,7 +266,7 @@ export default function TaskGridTanStack({
               items={rows.map((r) => r.id as string)}
               strategy={verticalListSortingStrategy}
             >
-              <tbody>
+              <tbody className="relative z-10">
                 {table.getRowModel().rows.map((row) => (
                   <DraggableRow key={row.id} row={row}>
                     {row.getVisibleCells().map((cell, index) => (

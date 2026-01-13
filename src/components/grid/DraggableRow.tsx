@@ -1,14 +1,14 @@
 "use client";
 
-import { ReactNode } from "react";
-import { Row } from "@tanstack/react-table";
+import React from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { TaskRow } from "@/types/tasks";
+import type { Row } from "@tanstack/react-table";
+import type { TaskRow } from "@/types/tasks";
 
 interface DraggableRowProps {
   row: Row<TaskRow>;
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 export default function DraggableRow({ row, children }: DraggableRowProps) {
@@ -19,12 +19,17 @@ export default function DraggableRow({ row, children }: DraggableRowProps) {
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: row.id });
+  } = useSortable({
+    id: row.original.id,
+  });
 
   const style: React.CSSProperties = {
     transform: CSS.Transform.toString(transform),
     transition,
-    background: isDragging ? "#e0f7fa" : undefined,
+    cursor: isDragging ? "grabbing" : "grab",
+    zIndex: isDragging ? 50 : undefined,
+    position: "relative",
+    background: isDragging ? "rgba(255,255,255,0.9)" : undefined,
   };
 
   return (
@@ -33,7 +38,12 @@ export default function DraggableRow({ row, children }: DraggableRowProps) {
       style={style}
       {...attributes}
       {...listeners}
-      className="hover:bg-gray-50"
+      className="
+        group
+        select-none
+        pointer-events-auto
+        hover:bg-gray-50
+      "
     >
       {children}
     </tr>
