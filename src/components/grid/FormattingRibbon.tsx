@@ -28,7 +28,7 @@ export default function FormattingRibbon({
 }) {
   return (
     <div className="w-full border-b bg-white/70 backdrop-blur-sm">
-      <div className="flex items-center gap-8 px-3 py-1.5 text-gray-700">
+      <div className="flex items-center gap-8 px-3 py-1 text-gray-700">
 
         {/* Group: Font */}
         <RibbonGroup>
